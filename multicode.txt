@@ -1,0 +1,14 @@
+if(fileupload1.hasfiles)
+{
+  string physcialpath = server.mappath("~/upload");
+   if(!directory.exists(physcialpath))
+      directory.createdirectory(physcialpath);
+      
+
+      int filecount = 0;
+      foreach(httppostedfile file in fileupload1.postedfiles)
+        {
+           filecount += 1;
+           file.saveas(physcialpath + file.filename);
+        }
+         

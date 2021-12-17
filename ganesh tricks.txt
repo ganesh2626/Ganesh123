@@ -1,0 +1,172 @@
+??.How to transfer the one page to anotherpage by using MVC?
+A)click the in this page of CLICK HERE and after page will dispaly.
+
+ <a href="~/controllername/next page name of cshtml page" class="btn btn-primary"> Click Here </a>
+Ex;
+ <a href="~/placement/login" class="btn btn-primary"> Click Here </a>
+
+??.How to validations are added in empty texbox?
+function message() {
+        if ($("#txtcompanyname").val().trim() == "") {
+            alert("Please enter company name.");
+            return false;
+        }
+        else if ($("#txtCIN").val().trim() == "") {
+            alert("Please Enter Company Identity Number.");
+            return false;
+        }
+
+"message": is indicate the how to click the button is use the key     : onclick="message();"
+
+??.how to allow only digits in textbox?
+A):
+
+       $("#txtCIN,#txtpincode,#txtphone").keypress(function (event) {
+
+        return onlydigits(event);
+    });
+
+
+       function onlydigits(e) {
+
+        if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57)) {
+
+            return false;
+
+        }
+
+    }
+
+   
+??.how to allow only characters in text box?
+A):  
+
+      $("#txtcompanyname,#txtcomapanyfirmdescription").keypress(function (event) {
+
+        return onlyChars(event);
+    });
+
+    function onlyChars(e) {
+        var keyVal = 0;
+
+        if (!e.which)
+
+            keyVal = e.keyCode;
+
+        else
+
+            keyVal = e.which; if (keyVal !== 27) {
+
+                if ((keyVal >= 65) && (keyVal <= 90) || (keyVal >= 97) && (keyVal <= 122) || keyVal === 8 || keyVal === 9 || keyVal === 32 || keyVal === 38 || keyVal === 45) {
+
+                    return true;
+
+                } else {
+
+                    keyVal = 0;
+
+                    return false;
+
+                }
+
+            }
+    }
+
+
+??.how to bind the validation on radiobutton ?
+
+if ($("input:radio[name='radio1']").is(':checked')) {
+        }
+        else {
+            alert("Are You A PCS please click yes or no")
+        }
+                 
+
+??.how to bind the  validation on checkbox?
+         else if ($("#ddlcountry").val() == "1") {
+            alert("Please select the country");
+            return false;
+        }
+
+??.how to bind the coorct email in textbox?
+
+function isEmail(email) {
+  var EmailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return EmailRegex.test(email);
+}
+
+
+
+??.how to append the data in ddl on view bag?
+A)
+index page:
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    function SetDept() {
+        $("#DeptName").val($("#ddlDept option:selected").text());
+    }
+</script>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        $(function () {
+                 $("#divData").empty().html('@ViewBag.Message');
+            });
+    </script>
+}
+<form method="post" asp-controller="Home" asp-action="Index">
+    <input type="hidden" name="DeptName" id="DeptName" />
+    <div class="row">
+        <div class="col-md-5">
+            <select id="ddlDept" name="DeptId" asp-for="DeptId" asp-items="@(new SelectList(ViewBag.Departments,"DeptId","DeptName"))" class="form-control" onchange="SetDept()">
+                <option value="0">Please select Department</option>
+            </select>
+        </div>
+
+
+??.how to bind the database in DDL?
+WEB.COFIG;
+
+<connectionStrings>
+		<add name="DBCS" connectionString="data source= 192.168.2.123; User ID=sa;Password=happy@123; database=ExcelDataBase"/>
+	</connectionStrings>
+
+CONTROLLER;
+
+ public ActionResult DDl()
+        {
+            string con = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+            SqlConnection sqlcon = new SqlConnection(con);
+            string sqlquery = "select *from [dbo].[Master_Country]";
+            SqlCommand sqlcmd = new SqlCommand(sqlquery, sqlcon);
+            sqlcon.Open();
+            SqlDataAdapter sqlda = new SqlDataAdapter(sqlcmd);
+            DataSet ds = new DataSet();
+            sqlda.Fill(ds);
+            ViewBag.countryname = ds.Tables[0];
+
+            List<SelectListItem> getcountryname = new List<SelectListItem>();
+
+            foreach (System.Data.DataRow dr in ViewBag.countryname.Rows)
+            {
+                getcountryname.Add(new SelectListItem { Text = dr["name"].ToString(), Value = dr["name"].ToString() });
+
+            }
+            ViewBag.countrys = getcountryname;
+            sqlcon.Close();
+            return View();
+        }
+
+VIEW;
+<center>
+    <h1> BIND THE DATA IN DROP DOWN LIST</h1>
+    <h2> when using sql server data base</h2>
+    <hr />
+    @Html.DropDownList("countrys");
+</center>
+
+
+
+
+

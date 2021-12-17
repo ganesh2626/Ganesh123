@@ -1,0 +1,20 @@
+Sub combinexcelfiles()
+Dim folder As String
+Dim file As String
+Dim sheet As Worksheet
+Application.ScreenUpdating = False
+folder = "C:\Users\Naga Ganesh Kalaga\Documents\New folder /"
+file = Dir(folder & "*.xls*")
+
+Do While file <> ""
+Workbooks.Open Filename:=folder & file, ReadOnly:=True
+For Each sht In activeworkbooks.Sheets
+sht.Copy after:=ThisWorkbook.Sheets(1)
+Next sht
+Workbooks(file).Close
+file = (Dir)
+Loop
+
+End Sub
+
+
